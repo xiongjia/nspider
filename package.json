@@ -1,0 +1,26 @@
+{
+  "name": "nspider",
+  "version": "0.0.1",
+  "description": "A Node.js Web Spider",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install && grunt",
+    "test": "grunt"
+  },
+  "author": "lexiongjia@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "~0.17.0",
+    "request": "~2.45.0",
+    "debug": "~2.0.0",
+    "underscore": "~1.7.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt": "~0.4.5"
+  },
+  "engines": {
+    "node": ">= 0.8.x",
+    "npm": ">=1.0.x"
+  }
+}
