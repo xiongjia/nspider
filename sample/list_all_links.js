@@ -4,7 +4,8 @@ var logger = require('winston'),
   optimist = require('optimist')
     .alias('h', 'help')
     .describe('srcUrl', 'the source URL')
-    .demand(['srcUrl']);
+    .demand(['srcUrl'])
+    .usage('nspider sample - List all links');
 
 (function (argv) {
   var nspider, spider;
