@@ -11,9 +11,7 @@
   "boss": true,
   "eqnull": true,
   "node": true,
-  "trailing": true,
   "strict": true,
-  "indent": 2,
   "predef": []
 }
 

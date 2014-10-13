@@ -3,7 +3,10 @@
 module.exports = function (grunt) {
   grunt.initConfig({
     jshint: {
-      options: { jshintrc: '.jshintrc' },
+      options: {
+        jshintrc: '.jshintrc',
+        reporter: require('jshint-stylish')
+      },
       gruntfile: { src: 'Gruntfile.js' },
       config: { src: ['lib/**/*.js'] }
     }
