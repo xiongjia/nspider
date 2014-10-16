@@ -7,7 +7,7 @@
     "build": "npm install && grunt",
     "test": "grunt"
   },
-  "author": "lexiongjia@gmail.com",
+  "author": "Xiong-Jia.Le <lexiongjia@gmail.com> (https://github.com/xiongjia)",
   "license": "MIT",
   "dependencies": {
     "cheerio": "~0.17.0",
