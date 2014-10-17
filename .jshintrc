@@ -12,6 +12,6 @@
   "eqnull": true,
   "node": true,
   "strict": true,
-  "predef": []
+  "predef": [ "describe", "it", "xit", "before", "after", "beforeEach", "afterEach" ]
 }
 
