@@ -15,14 +15,11 @@ exports = module.exports = function (opts) {
   defOpts.proxy = opts.proxy || defOpts.proxy;
   defOpts.fetchTimeout = opts.fetchTimeout || defOpts.fetchTimeout;
   defOpts.httpHdrUsrAgent = opts.httpHdrUsrAgent || defOpts.httpHdrUsrAgent;
-  dbgTrace('%s options: %j', misc.nspider.getVer(), defOpts);
+  dbgTrace('%s options: %j', misc.pkgInf.getFullName(), defOpts);
+
   return {
-    Spider: require('./lib/spider.js'),
-    version: {
-      majorVer: misc.nspider.getMajorVer(),
-      minorVer: misc.nspider.getMinorVer(),
-      ver: misc.nspider.getVer()
-    }
+    version: misc.pkgInf.getVersion(),
+    Spider: require('./lib/spider.js')
   };
 };
 
