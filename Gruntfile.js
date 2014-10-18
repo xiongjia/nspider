@@ -8,7 +8,9 @@ module.exports = function (grunt) {
         reporter: require('jshint-stylish')
       },
       gruntfile: { src: 'Gruntfile.js' },
-      config: { src: ['lib/**/*.js'] }
+      core: { src: ['lib/**/*.js'] },
+      test: { src: ['test/**/*.js'] },
+      examples: { src: ['examples/**/*.js'] }
     },
     mochaTest: {
       test: {
