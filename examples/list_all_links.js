@@ -1,35 +1,23 @@
 'use strict';
 
-var logger = require('winston'),
-  optimist = require('optimist')
-    .alias('h', 'help')
-    .describe('srcUrl', 'the source URL')
-    .demand(['srcUrl'])
-    .usage('nspider sample - List all links');
+var nspider = require('../')();
 
 (function (argv) {
-  var nspider, spider;
+  var spider;
 
-  if (argv.help) {
-    optimist.showHelp();
-    process.exit(0);
-  }
-
-  /* initialize */
-  logger.cli();
-  nspider = require('../')({ logger: logger });
-  spider = new nspider.Spider();
+  /* create spider object */
+  spider = nspider.Spider();
   spider.on('fetchCompleted', function (data) {
-    var links;
-    links = data.dom('a');
-    links.each(function (idx, item) {
-      var link = data.dom(item).attr('href');
-      logger.info('[%d] - %s', idx, link);
+    data.dom('a').each(function (idx,  item) {
+      /* Print the <a> href attr */
+      console.log('Link[%d]: %s', idx, data.dom(item).attr('href'));
     });
   }).on('fetchError', function (err) {
-    logger.error('fetchError: %s', err.toString());
+    /* fetch error */
+    console.log('fetchError: %s', err.toString());
   });
-  logger.info('Fetch: %s', argv.srcUrl);
-  spider.fetch(argv.srcUrl);
-})(optimist.argv);
+  
+  /* check the 'http://nodejs.org' */ 
+  spider.fetch('http://nodejs.org');
+})();
 

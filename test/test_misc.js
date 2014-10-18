@@ -35,24 +35,33 @@ describe('Test lib/misc.js', function () {
   });
 
   it('logger Testing', function (done) {
-    var handler;
+    var handler, msgs;
 
     misc.logger.should.have.properties([
       'debug', 'warn', 'info', 'error', 'update']);
 
     handler = {
-      error: function (msg) { msg.should.equal('error'); },
-      warn: function (msg) { msg.should.equal('warn'); },
-      info: function (msg) { msg.should.equal('info'); },
-      debug: function (msg) { msg.should.equal('debug'); },
+      error: function (msg) { msgs.push(msg); },
+      warn: function (msg) { msgs.push(msg); },
+      info: function (msg) { msgs.push(msg); },
+      debug: function (msg) { msgs.push(msg); }
     };
+
+    msgs = [];
     misc.logger.update({ handler: handler, silent: false });
     misc.logger.error('error');
     misc.logger.warn('warn');
     misc.logger.info('info');
     misc.logger.debug('debug');
+    msgs.should.containDeep(['error', 'warn', 'info', 'debug']);
 
+    msgs = [];
     misc.logger.update({ handler: {}, silent: true });
+    misc.logger.error('error');
+    misc.logger.warn('warn');
+    misc.logger.info('info');
+    misc.logger.debug('debug');
+    msgs.should.have.length(0);
     done();
   });
 
