@@ -2,15 +2,21 @@
 
 var nspider = require('../')();
 
-(function (argv) {
+(function () {
   var spider;
 
   /* create spider object */
   spider = nspider.Spider();
   spider.on('fetchCompleted', function (data) {
-    data.dom('a').each(function (idx,  item) {
-      /* Print the <a> href attr */
-      console.log('Link[%d]: %s', idx, data.dom(item).attr('href'));
+    if (data.contentType.type !== 'text' ||
+        data.contentType.subtype !== 'html') {
+      /* Not a HTML page */
+      return;
+    }
+
+    /* Print all <a> href attr */
+    data.$('a').each(function (idx,  item) {
+      console.log('Link[%d]: %s', idx, data.$(item).attr('href'));
     });
   }).on('fetchError', function (err) {
     /* fetch error */

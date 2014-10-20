@@ -13,7 +13,8 @@
     "cheerio": "~0.17.0",
     "request": "~2.45.0",
     "debug": "~2.0.0",
-    "underscore": "~1.7.0"
+    "underscore": "~1.7.0",
+    "media-typer": "~0.3.0"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
