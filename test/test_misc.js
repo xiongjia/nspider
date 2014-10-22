@@ -17,7 +17,9 @@ describe('Tests for lib/misc.js', function () {
       'osProxy',
       'defaultOpts',
       'timeSpan',
-      'parseMediaType']);
+      'parseMediaType',
+      'parseHTML',
+      'sinkBuffStream']);
     done();
   });
 
@@ -71,8 +73,14 @@ describe('Tests for lib/misc.js', function () {
   });
 
   it('checkOpts Testing', function (done) {
-    var data, testOpts;
+    var data, testOpts, allOpts;
 
+    allOpts = [
+      'fetchTimeout',
+      'proxy',
+      'httpHdrUsrAgent',
+      'dataEncoding'
+    ];
     misc.defaultOpts.should.have.properties([
       'getItem', 'getData', 'setData', 'checkOpts']);
 
@@ -82,16 +90,20 @@ describe('Tests for lib/misc.js', function () {
     data.should.equal(1000 * 30);
     data = misc.defaultOpts.getItem('httpHdrUsrAgent');
     data.should.equal(misc.pkgInf.getFullName());
+    data = misc.defaultOpts.getItem('dataEncoding');
+    data.should.equal('utf8');
 
     data = misc.defaultOpts.getData();
-    data.should.have.properties(['fetchTimeout', 'proxy', 'httpHdrUsrAgent']);
+    data.should.have.properties(allOpts);
 
     testOpts = { proxy: 'http://localhost:8080' };
     misc.defaultOpts.checkOpts(testOpts);
-    testOpts.should.have.properties(['fetchTimeout', 'proxy', 'httpHdrUsrAgent']);
+    testOpts.should.have.properties(allOpts);
     testOpts.proxy.should.equal('http://localhost:8080');
 
-    data = misc.defaultOpts.setData({ fetchTimeout: 888 }).getItem('fetchTimeout');
+    data = misc.defaultOpts
+      .setData({ fetchTimeout: 888 })
+      .getItem('fetchTimeout');
     data.should.equal(888);
     done();
   });
@@ -100,7 +112,7 @@ describe('Tests for lib/misc.js', function () {
     var tmSpan;
 
     tmSpan = misc.timeSpan();
-    tmSpan.should.have.properties(['start', 'end', 'getData']);
+    tmSpan.should.have.properties(['start', 'end', 'getData', 'getVal']);
     tmSpan.start();
     setTimeout(function () {
       var data;
@@ -108,8 +120,9 @@ describe('Tests for lib/misc.js', function () {
       data = tmSpan.getData();
       data.should.have.properties(['begin', 'end']);
       data.end.should.greaterThan(data.begin);
+      tmSpan.getVal().should.not.lessThan(30);
       done();
-    }, 100);
+    }, 30);
   });
 
   it('parseMediaType Testing', function (done) {
@@ -123,9 +136,36 @@ describe('Tests for lib/misc.js', function () {
 
     testType = 'badTestType';
     mediaType = misc.parseMediaType(testType);
-    mediaType.should.have.properties(['type']);
+    mediaType.should.have.properties(['type', 'err']);
     mediaType.type.should.equal('unknown');
     done();
+  });
+
+  it('parseHTML Testing', function (done) {
+    var html, attrVal;
+
+    html = misc.parseHTML('<a href="http://localhost"> Test </a>');
+    should.exist(html);
+    html.should.have.properties(['dom', 'tmSpan']);
+    should.not.exist(html.domErr);
+    attrVal = html.dom('a').attr('href');
+    should.exist(attrVal);
+    attrVal.should.equal('http://localhost');
+    done();
+  });
+
+  it('sinkBuffStream Testing', function (done) {
+    var testStream;
+
+    testStream = misc.sinkBuffStream(function (err, buf) {
+      should.not.exist(err);
+      should.exist(buf);
+      buf.toString().should.equal('test');
+      done();
+    });
+
+    testStream.write('test');
+    testStream.end();
   });
 });
 

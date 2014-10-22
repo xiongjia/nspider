@@ -1,14 +1,13 @@
 'use strict';
 
-var should = require('should'),
-  stream = require('stream'),
-  _ = require('underscore');
+var should = require('should');
 
 describe('Tests for lib/transport.js', function () {
-  var transport, nock;
+  var transport, nock, misc;
 
   /* transport module & mock data */
   transport = require('../lib/transport.js');
+  misc = require('../lib/misc.js');
   nock = require('nock');
 
   it('Interface Testing', function (done) {
@@ -21,6 +20,9 @@ describe('Tests for lib/transport.js', function () {
     var fetchOpts;
 
     nock('http://tran.mock')
+      .defaultReplyHeaders({
+        'Content-Type': 'text/plain'
+      })
       .get('/testString')
       .reply(200, 'testString');
 
@@ -33,6 +35,9 @@ describe('Tests for lib/transport.js', function () {
       data.statusCode.should.equal(200);
       should.exist(data.content);
       data.content.toString().should.equal('testString');
+      should.exist(data.contentType);
+      data.contentType.type.should.equal('text');
+      data.contentType.subtype.should.equal('plain');
       done();
     });
   });
@@ -54,27 +59,16 @@ describe('Tests for lib/transport.js', function () {
     });
   });
 
-  it ('fetch stream', function (done) {
-    var testStream, fetchOpts, chunks, totalLen, content;
+  it('fetch stream', function (done) {
+    var testStream, fetchOpts;
 
     nock('http://tran.mock')
       .get('/testStream')
       .reply(200, 'stream content');
 
-    chunks = [];
-    totalLen = 0;
-    testStream = new stream.PassThrough();
-    testStream.on('data', function (chunk) {
-      chunks.push(chunk);
-      totalLen += chunk.length;
-    }).on('end', function () {
-      var targetStart = 0;
-      content = new Buffer(totalLen);
-      _.each(chunks, function (item) {
-        item.copy(content, targetStart, 0, item.length);
-        targetStart += item.length;
-      });
-      content.toString().should.equal('stream content');
+    testStream = misc.sinkBuffStream(function (err, data) {
+      should.not.exist(err);
+      data.toString().should.equal('stream content');
       done();
     });
 
