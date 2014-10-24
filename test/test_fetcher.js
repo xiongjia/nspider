@@ -68,7 +68,7 @@ describe('Tests for lib/fetcher.js', function () {
 
     task = {
       url: 'http://fetch.mock/testPage',
-      stream: testStream
+      _stream: testStream
     };
     fetcher.fetch(task, function (err, data) {
       should.not.exist(err);

@@ -82,7 +82,7 @@ describe('Tests for lib/misc.js', function () {
       'dataEncoding'
     ];
     misc.defaultOpts.should.have.properties([
-      'getItem', 'getData', 'setData', 'checkOpts']);
+      'getItem', 'setItem', 'getData', 'setData', 'checkOpts']);
 
     data = misc.defaultOpts.getItem('BadName');
     should.not.exist(data);
@@ -105,6 +105,11 @@ describe('Tests for lib/misc.js', function () {
       .setData({ fetchTimeout: 888 })
       .getItem('fetchTimeout');
     data.should.equal(888);
+
+    data = misc.defaultOpts
+      .setItem('fetchTimeout', 777)
+      .getItem('fetchTimeout');
+    data.should.equal(777);
     done();
   });
 
