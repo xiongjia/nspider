@@ -1,53 +1,46 @@
 # nspider
 
-It's a Node.js Web Spider library. 
-nspider = [node.js](http://nodejs.org/) + [cheerio](https://github.com/cheeriojs/cheerio) + [request](https://github.com/mikeal/request) . 
+A simple Web Spider/Crawler Node.js package.
+```javascript
+var nspider = require('nspider')();
 
-## Usage:
-```
-  var nspider, spider;
+/* create spider object */
+var spider = new nspider.Spider();
 
-  nspider = require('nspider')();
-  spider = new nspider.Spider();
-  spider.on('fetchCompleted', function (data) {
-    var links;
-    links = data.dom('a');
-    links.each(function (idx, item) {
-      var link = data.dom(item).attr('href');
-      logger.info('[%d] - %s', idx, link);
-    });
+/* fetch the content of 'http://nodejs.org' */
+spider.fetch('http://nodejs.org', function (err, data) {
+  if (err) {
+    /* fetch error */
+    console.log('fetchError: %s', err.toString());
+    return;
+  }
+
+  if (data.contentType.type !== 'text' ||
+      data.contentType.subtype !== 'html') {
+    /* Not a HTML page */
+    console.log('Invalid contentType: %j', data.contentType);
+    return;
+  }
+
+  /* Print all <a> href attr */
+  data.$('a').each(function (idx,  item) {
+    console.log('Link[%d]: %s', idx, data.$(item).attr('href'));
   });
-
-  spider.fetch('http://nodejs.org');
+});
 ```
 
-## Samples 
-* Build Samples:
-  Run `npm run build` in the `sample` folder.
-
-### List all links ( sample/list_all_links.js) 
-This sample fetch the HTML from the srouce URL and parse all the links from the HTML source.
-* Usage:      
+## Installation
 ```
-nspider sample - List all links
-
-Options:
-  --srcUrl  the source URL  [required]
+npm install nspider
 ```
 
-* Example:
-  `node ./list_all_links.js --srcUrl http://nodejs.org/`
+## Examples
+* `examples/list_all_links.js` - List all links.
+* `examples/save_all_img.js` - Save all images.
 
-### Save the Node.js API Docs to .md files ( sample/save_node_apidoc.js )
-This sample fetch the Node.js API Docs from http://nodejs.org/api . and save the API Docs to Markdown files.
-* Usage:    
+## Build
 ```
-nspider sample - Save node.js API document to .md files.
-
-Options:
-  --destFolder  The dest folder.
+git clone https://github.com/xiongjia/nspider.git
+npm run build
 ```
-
-* Example:
-  `node ./save_node_apidoc.js --destFolder ./dest`
 
