@@ -1,6 +1,6 @@
 {
   "name": "nspider",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Node.js Web Spider",
   "main": "index.js",
   "scripts": {
