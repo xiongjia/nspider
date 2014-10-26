@@ -1,4 +1,4 @@
-# nspider
+# nspider [![Build Status](https://travis-ci.org/xiongjia/nspider.svg?branch=master)](https://travis-ci.org/xiongjia/nspider)
 
 A simple Web Spider/Crawler Node.js package.
 ```javascript
