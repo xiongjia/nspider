@@ -1,6 +1,10 @@
 'use strict';
 
 module.exports = function (grunt) {
+  /* load grunt plugins */
+  require('load-grunt-tasks')(grunt);
+  require('time-grunt')(grunt);
+
   grunt.initConfig({
     jshint: {
       options: {
@@ -19,10 +23,6 @@ module.exports = function (grunt) {
       }
     }
   });
-
-  /* load plugins */
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-mocha-test');
 
   /* alias */
   grunt.registerTask('test', ['jshint', 'mochaTest']);
